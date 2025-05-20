@@ -56,9 +56,5 @@ export class Transaction {
   @ManyToOne(() => Category, (category) => category.transactions)
   category: Category;
 
-  @CreateDateColumn()
-  createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

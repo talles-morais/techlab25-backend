@@ -11,6 +11,7 @@ import { BankAccount } from "./BankAccount";
 import { CreditCard } from "./CreditCard";
 import { Transaction } from "./Transaction";
 import { Category } from "./Category";
+import { ScheduledTransaction } from "./ScheduledTransaction";
 
 @Entity()
 @Index(["email"], { unique: true })
@@ -35,6 +36,9 @@ export class User {
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions: Transaction[];
+
+  @OneToMany(() => ScheduledTransaction, (transaction) => transaction.user)
+  scheduledTransactons: ScheduledTransaction[];
 
   @OneToMany(() => Category, (category) => category.user)
   categories: Category[];

@@ -8,8 +8,9 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "./User";
-import { BankAccountType } from "../enums/BankAccountType";
+import { BankAccountType } from "../enums/BankAccountType.enum";
 import { Transaction } from "./Transaction";
+import { ScheduledTransaction } from "./ScheduledTransaction";
 
 @Entity()
 export class BankAccount {
@@ -37,6 +38,11 @@ export class BankAccount {
     nullable: true,
   })
   incomingTransactions?: Transaction[];
+
+  @OneToMany(() => ScheduledTransaction, (transaction) => transaction.bankAccount, {
+    nullable: true,
+  })
+  scheduledTransactions?: ScheduledTransaction[];
 
   @CreateDateColumn()
   createdAt: Date;
