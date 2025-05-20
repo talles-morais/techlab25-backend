@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -10,6 +11,7 @@ import { User } from "./User";
 import { BankAccountType } from "../enums/BankAccountType";
 import { Transaction } from "./Transaction";
 
+@Entity()
 export class BankAccount {
   @PrimaryGeneratedColumn("uuid")
   id: string;

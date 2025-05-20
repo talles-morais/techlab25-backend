@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -10,6 +11,7 @@ import { CreditCard } from "./CreditCard";
 import { CreditInvoiceStatus } from "../enums/CreditInvoiceStatus.enum";
 import { Transaction } from "./Transaction";
 
+@Entity()
 export class CreditInvoice {
   @PrimaryGeneratedColumn()
   id: string;

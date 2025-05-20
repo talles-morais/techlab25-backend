@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -12,6 +13,7 @@ import { CreditInvoice } from "./CreditInvoice";
 import { User } from "./User";
 import { Category } from "./Category";
 
+@Entity()
 export class Transaction {
   @PrimaryGeneratedColumn("uuid")
   id: string;
