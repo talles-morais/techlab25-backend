@@ -1,4 +1,4 @@
 export enum TransactionType {
   INCOME,
-  EXPENSE
+  EXPENSE,
 }

@@ -35,7 +35,7 @@ export class BankAccount {
     nullable: true,
   })
   incomingTransactions?: Transaction[];
-  
+
   @CreateDateColumn()
   createdAt: Date;
 

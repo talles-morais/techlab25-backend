@@ -31,7 +31,7 @@ export class CreditInvoice {
 
   @OneToMany(() => Transaction, (transaction) => transaction.invoice)
   transactions?: Transaction[];
-  
+
   @CreateDateColumn()
   createdAt: Date;
 
