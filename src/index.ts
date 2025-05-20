@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
 import { AppDataSource } from "./data-source"
-import { User } from "./entity/User"
+import { User } from "./entities/User"
 import { server } from "./server"
 
 AppDataSource.initialize().then(async () => {
