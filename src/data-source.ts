@@ -1,15 +1,15 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "./entities/User";
-console.log(process.env.POSTGRES_PASSWORD);
+import config from "./config/config";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: process.env.POSTGRES_HOST,
-  port: parseInt(process.env.POSTGRES_PORT || "5432", 10),
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
+  host: config.postgres.host,
+  port: config.postgres.port,
+  username: config.postgres.user,
+  password: config.postgres.password,
+  database: config.postgres.database,
   synchronize: true,
   logging: false,
   entities: [User],
