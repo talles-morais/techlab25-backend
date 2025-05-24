@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors"
 import swaggerUi from "swagger-ui-express";
 import cookieParser from "cookie-parser";
 import { errorHandlerMiddleware } from "./middlewares/error-handler";
@@ -6,6 +7,8 @@ import { router } from "./routes";
 import swaggerSpec from "./swagger";
 
 const server = express();
+
+server.use(cors())
 
 server.use(express.json());
 

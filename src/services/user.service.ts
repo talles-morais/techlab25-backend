@@ -17,7 +17,7 @@ export class UserService {
     const existingUser = await this.userRepository.findByEmail(userData.email);
 
     if (existingUser) {
-      throw new HttpError(409, "Usuário já existe.");
+      throw new HttpError(409, "Usuário com e-mail já cadastrado.");
     }
 
     const user = new User();
