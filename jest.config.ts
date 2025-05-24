@@ -36,6 +36,8 @@ const config: Config = {
     "/src/dtos/",
     "/src/utils/hash.ts",
     "/src/utils/http-error.ts",
+    "/tests/helpers",
+    "/src/data.source.ts"
   ],
 
   // Indicates which provider should be used to instrument code for coverage
