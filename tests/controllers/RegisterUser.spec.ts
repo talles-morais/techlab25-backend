@@ -3,6 +3,7 @@ import { UserController } from "../../src/controllers/user.controller";
 import { UserService } from "../../src/services/user.service";
 import { CreateUserResponseDTO } from "../../src/dtos/user/create-user-response.dto";
 import { HttpError } from "../../src/utils/http-error";
+import { ZodError } from "zod";
 
 jest.mock("../../src/services/user.service");
 
@@ -74,5 +75,16 @@ describe("User controller - create user", () => {
     await expect(
       userController.createUser(req as any, res as any)
     ).rejects.toThrow(error);
+  });
+
+  it("should throw ZodError if body is invalid", async () => {
+    const req = { body: { name: "", email: "invalid", password: "123" } } as Request;
+    const res = {} as Response;
+
+    await expect(userController.createUser(req, res))
+      .rejects
+      .toThrow(ZodError);
+
+    expect(userServiceMock.createUser).not.toHaveBeenCalled();
   });
 });

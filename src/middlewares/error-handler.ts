@@ -15,7 +15,12 @@ export const errorHandlerMiddleware: ErrorRequestHandler = (
   }
 
   if (error instanceof ZodError) {
-    res.status(422).json({ errors: error.errors });
+    const formattedErrors = error.errors.map((err) => ({
+      path: err.path.join("."), // opcional, só para visualização do campo
+      message: err.message,
+    }));
+
+    res.status(422).json({ errors: formattedErrors });
     return;
   } else if (error instanceof HttpError) {
     res.status(error.statusCode).json({ message: error.message });
