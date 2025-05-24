@@ -68,6 +68,47 @@ categoriesRouter.get(
   "/",
   authMiddleware(),
   categoryController.getAllCategories
-)
+);
+
+/**
+ * @swagger
+ * /categories/{id}:
+ *   put:
+ *     summary: Atualiza uma categoria existente
+ *     description: Atualiza os dados de uma categoria pelo ID. Utiliza middleware de autenticação.
+ *     tags:
+ *       - Categorias
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID da categoria a ser atualizada
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Eletrodomésticos"
+ *     responses:
+ *       200:
+ *         description: Categoria atualizada com sucesso
+ *       401:
+ *         description: Não autorizado
+ *       404:
+ *         description: Categoria não encontrada
+ *       422:
+ *         description: Dados inválidos
+ */
+categoriesRouter.put(
+  "/:id",
+  authMiddleware(),
+  categoryController.updateCategory
+);
 
 export default categoriesRouter;

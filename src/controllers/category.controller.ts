@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CategoryRepository } from "../repositories/category.repository";
 import { CategoryService } from "../services/category.service";
 import { CreateCategorySchema } from "../dtos/category/create-category.dto";
+import { UpdateCategorySchema } from "../dtos/category/update-category.dto";
 
 export class CategoryController {
   private categoryService: CategoryService;
@@ -24,5 +25,17 @@ export class CategoryController {
   getAllCategories = async (req: Request, res: Response) => {
     const categories = await this.categoryService.getAllCategories(req.user.id);
     res.status(200).json(categories);
+  };
+
+  updateCategory = async (req: Request, res: Response) => {
+    const categoryId = req.params.id;
+    const categoryData = UpdateCategorySchema.parse(req.body);
+
+    const category = await this.categoryService.updateCategory(
+      req.user.id,
+      categoryId,
+      categoryData
+    );
+    res.status(200).json(category);
   };
 }

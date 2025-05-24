@@ -14,6 +14,21 @@ export class CategoryRepository {
   }
 
   async getAll(userId: string) {
-    return await this.categoryRepository.findBy({ user: { id: userId }});
+    return await this.categoryRepository.findBy({ user: { id: userId } });
+  }
+
+  async getById(userId: string, categoryId: string) {
+    return await this.categoryRepository.findOne({
+      where: { id: categoryId, user: { id: userId } },
+      relations: ["user"],
+    });
+  }
+
+  async update(userId: string, category: Category) {
+    return await this.categoryRepository.save({
+      id: category.id,
+      user: { id: userId },
+      name: category.name,
+    });
   }
 }
