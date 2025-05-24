@@ -15,7 +15,7 @@ export const errorHandlerMiddleware: ErrorRequestHandler = (
   }
 
   if (error instanceof ZodError) {
-    res.status(400).json({ errors: error.errors });
+    res.status(422).json({ errors: error.errors });
     return;
   } else if (error instanceof HttpError) {
     res.status(error.statusCode).json({ message: error.message });
