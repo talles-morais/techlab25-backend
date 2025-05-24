@@ -15,27 +15,23 @@ declare global {
 
 export function authMiddleware() {
   return async function (req: Request, res: Response, next: NextFunction) {
-    try {
-      const token = req.cookies.token;
-      const jwt_secret = config.jwt.secret;
+    const token = req.cookies.token;
+    const jwt_secret = config.jwt.secret;
 
-      if (!token) {
-        throw new HttpError(401, "Usuário não autorizado.");
-      }
-
-      const decoded = jwt.verify(token, jwt_secret) as jwt.JwtPayload;
-
-      if (!decoded || !decoded.user.id) {
-        throw new HttpError(401, "Usuário não autorizado.");
-      }
-
-      req.user = {
-        id: decoded.user.id,
-      };
-
-      next();
-    } catch (error) {
-      res.status(400).json({ error });
+    if (!token) {
+      throw new HttpError(401, "Usuário não autorizado.");
     }
+
+    const decoded = jwt.verify(token, jwt_secret) as jwt.JwtPayload;
+
+    if (!decoded || !decoded.id) {
+      throw new HttpError(401, "Usuário não autorizado.");
+    }
+
+    req.user = {
+      id: decoded.id,
+    };
+
+    next();
   };
 }

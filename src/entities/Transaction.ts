@@ -55,6 +55,4 @@ export class Transaction {
 
   @ManyToOne(() => Category, (category) => category.transactions)
   category: Category;
-
-
 }

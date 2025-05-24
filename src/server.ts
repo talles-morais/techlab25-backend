@@ -9,11 +9,11 @@ const server = express();
 
 server.use(express.json());
 
+server.use(cookieParser());
+
 server.use(router);
 
 server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-server.use(cookieParser());
 
 server.use(errorHandlerMiddleware);
 
