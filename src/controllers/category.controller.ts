@@ -7,9 +7,13 @@ import { UpdateCategorySchema } from "../dtos/category/update-category.dto";
 export class CategoryController {
   private categoryService: CategoryService;
 
-  constructor() {
-    const categoryRepository = new CategoryRepository();
-    this.categoryService = new CategoryService(categoryRepository);
+  constructor(categoryService?: CategoryService) {
+    if (categoryService) {
+      this.categoryService = categoryService;
+    } else {
+      const categoryRepository = new CategoryRepository();
+      this.categoryService = new CategoryService(categoryRepository);
+    }
   }
 
   createCategory = async (req: Request, res: Response) => {
