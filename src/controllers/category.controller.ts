@@ -38,4 +38,12 @@ export class CategoryController {
     );
     res.status(200).json(category);
   };
+
+  deleteCategory = async (req: Request, res: Response) => {
+    const categoryId = req.params.id;
+
+    await this.categoryService.deleteCategory(req.user.id, categoryId);
+
+    res.sendStatus(204);
+  };
 }

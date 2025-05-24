@@ -57,4 +57,24 @@ export class CategoryService {
 
     return updatedCategory;
   }
+
+  async deleteCategory(userId: string, categoryId: string) {
+    const categoryExists = await this.categoryRepository.getById(
+      userId,
+      categoryId
+    );
+
+    if (!categoryExists) {
+      throw new HttpError(404, "Categoria não encontrada.");
+    }
+
+    if (categoryExists.user.id !== userId) {
+      throw new HttpError(
+        403,
+        "Você não tem permissão para deletar esta categoria."
+      );
+    }
+
+    await this.categoryRepository.delete(userId, categoryExists.id);
+  }
 }

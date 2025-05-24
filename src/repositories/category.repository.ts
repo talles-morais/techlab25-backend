@@ -31,4 +31,11 @@ export class CategoryRepository {
       name: category.name,
     });
   }
+
+  async delete(userId: string, categoryId: string) {
+    return await this.categoryRepository.delete({
+      id: categoryId,
+      user: { id: userId },
+    });
+  }
 }

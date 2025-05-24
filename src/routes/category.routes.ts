@@ -111,4 +111,33 @@ categoriesRouter.put(
   categoryController.updateCategory
 );
 
+/**
+ * @swagger
+ * /categories/{id}:
+ *   delete:
+ *     summary: Remove uma categoria existente
+ *     description: Remove uma categoria pelo ID. Utiliza middleware de autenticação.
+ *     tags:
+ *       - Categorias
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID da categoria a ser removida
+ *     responses:
+ *       200:
+ *         description: Categoria removida com sucesso
+ *       401:
+ *         description: Não autorizado
+ *       404:
+ *         description: Categoria não encontrada
+ */
+categoriesRouter.delete(
+  "/:id",
+  authMiddleware(),
+  categoryController.deleteCategory
+);
+
 export default categoriesRouter;
