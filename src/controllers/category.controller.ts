@@ -11,10 +11,18 @@ export class CategoryController {
     this.categoryService = new CategoryService(categoryRepository);
   }
 
-  createCategory = async ( req: Request, res: Response) => {
-    const categoryData = CreateCategorySchema.parse(req.body)
+  createCategory = async (req: Request, res: Response) => {
+    const categoryData = CreateCategorySchema.parse(req.body);
 
-    const category = await this.categoryService.createCategory(req.user.id, categoryData)
-    res.status(201).json(category)
-  }
+    const category = await this.categoryService.createCategory(
+      req.user.id,
+      categoryData
+    );
+    res.status(201).json(category);
+  };
+
+  getAllCategories = async (req: Request, res: Response) => {
+    const categories = await this.categoryService.getAllCategories(req.user.id);
+    res.status(200).json(categories);
+  };
 }

@@ -18,4 +18,10 @@ export class CategoryService {
 
     return createdCategory;
   }
+
+  async getAllCategories(userId: string) {
+    const categories = await this.categoryRepository.getAll(userId);
+
+    return categories;
+  }
 }

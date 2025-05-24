@@ -37,4 +37,37 @@ categoriesRouter.post(
   categoryController.createCategory
 );
 
+/**
+ * @swagger
+ * /categories/:
+ *   get:
+ *     summary: Lista todas as categorias
+ *     description: Retorna todas as categorias cadastradas. Utiliza middleware de autenticação.
+ *     tags:
+ *       - Categorias
+ *     responses:
+ *       200:
+ *         description: Lista de categorias retornada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: "123e4567-e89b-12d3-a456-426614174000"
+ *                   name:
+ *                     type: string
+ *                     example: "Eletrônicos"
+ *       401:
+ *         description: Não autorizado
+ */
+categoriesRouter.get(
+  "/",
+  authMiddleware(),
+  categoryController.getAllCategories
+)
+
 export default categoriesRouter;

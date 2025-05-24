@@ -10,6 +10,10 @@ export class CategoryRepository {
   }
 
   async create(category: Category) {
-    return await this.categoryRepository.save(category)
+    return await this.categoryRepository.save(category);
+  }
+
+  async getAll(userId: string) {
+    return await this.categoryRepository.findBy({ user: { id: userId }});
   }
 }
