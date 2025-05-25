@@ -13,6 +13,7 @@ const config = {
   env: process.env.NODE_ENV || "development",
   port: parseInt(process.env.PORT || "3000"),
   debug: process.env.APP_DEBUG === "true",
+  frontend_url: requireEnv("FRONTEND_URL"),
 
   postgres: {
     host: requireEnv("POSTGRES_HOST"),
@@ -30,6 +31,10 @@ const config = {
   jwt: {
     secret: requireEnv("JWT_SECRET"),
   },
+
+  google: {
+    clientId: requireEnv("GOOGLE_CLIENT_ID")
+  }
 };
 
 export default config;
