@@ -54,7 +54,7 @@ describe("User controller - create user", () => {
       password: "Senha@123",
     };
 
-    const error = new HttpError(409, "Usuário já existe.");
+    const error = new HttpError(409, "Usuário já cadastrado.");
 
     userServiceMock.createUser.mockRejectedValue(error);
 

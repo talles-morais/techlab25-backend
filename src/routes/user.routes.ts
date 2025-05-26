@@ -87,4 +87,6 @@ userRouter.post("/register", userController.createUser);
  */
 userRouter.post("/login", userController.loginUser)
 
+userRouter.post("/login/google", userController.loginWithGoogle)
+
 export default userRouter;
