@@ -3,6 +3,7 @@ import { CategoryRepository } from "../repositories/category.repository";
 import { CategoryService } from "../services/category.service";
 import { CreateCategorySchema } from "../dtos/category/create-category.dto";
 import { UpdateCategorySchema } from "../dtos/category/update-category.dto";
+import { AppDataSource } from "../data-source";
 
 export class CategoryController {
   private categoryService: CategoryService;
@@ -11,7 +12,8 @@ export class CategoryController {
     if (categoryService) {
       this.categoryService = categoryService;
     } else {
-      const categoryRepository = new CategoryRepository();
+      const entityManager = AppDataSource.manager;
+      const categoryRepository = new CategoryRepository(entityManager);
       this.categoryService = new CategoryService(categoryRepository);
     }
   }

@@ -3,12 +3,14 @@ import { BankAccountService } from "../services/bank-account.service";
 import { CreateBankAccountSchema } from "../dtos/bank-account/create-bank-account.dto";
 import { BankAccountRepository } from "../repositories/bank-account.repository";
 import { UpdateBankAccountSchema } from "../dtos/bank-account/update-bank-account.dto";
+import { AppDataSource } from "../data-source";
 
 export class BankAccountController {
   private bankAccountService: BankAccountService;
 
   constructor() {
-    const bankAccountRepository = new BankAccountRepository();
+    const entityManager = AppDataSource.manager;
+    const bankAccountRepository = new BankAccountRepository(entityManager);
     this.bankAccountService = new BankAccountService(bankAccountRepository);
   }
 
