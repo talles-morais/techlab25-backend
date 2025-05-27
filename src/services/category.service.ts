@@ -15,6 +15,7 @@ export class CategoryService {
     const category = new Category();
     category.name = categoryData.name;
     category.user = user;
+    category.iconName = categoryData.iconName;
 
     const createdCategory = await this.categoryRepository.create(category);
 
