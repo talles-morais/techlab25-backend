@@ -26,4 +26,10 @@ export class BankAccountService {
 
     return createdBankAccount;
   }
+
+  async getAllBankAccounts(userId: string) {
+    const bankAccounts = await this.bankAccountRepository.getAll(userId);
+
+    return bankAccounts;
+  }
 }

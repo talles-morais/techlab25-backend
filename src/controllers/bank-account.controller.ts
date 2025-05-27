@@ -21,4 +21,12 @@ export class BankAccountController {
 
     res.status(201).json(bankAccount);
   };
+
+  getAllBankAccounts = async (req: Request, res: Response) => {
+    const bankAccounts = await this.bankAccountService.getAllBankAccounts(
+      req.user.id
+    );
+
+    res.status(200).json(bankAccounts);
+  };
 }

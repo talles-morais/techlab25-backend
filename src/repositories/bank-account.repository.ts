@@ -10,6 +10,10 @@ export class BankAccountRepository {
   }
 
   async create(bankAccount: BankAccount) {
-    return await this.bankAccountRepository.save(bankAccount)
+    return await this.bankAccountRepository.save(bankAccount);
+  }
+
+  async getAll(userId: string) {
+    return await this.bankAccountRepository.findBy({ user: { id: userId } });
   }
 }

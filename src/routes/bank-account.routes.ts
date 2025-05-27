@@ -46,4 +46,37 @@ bankAccountRouter.post(
   bankAccountController.createBankAccount
 );
 
-export { bankAccountRouter }
+/**
+ * @swagger
+ * /bank-accounts/:
+ *   get:
+ *     summary: Lista todas as contas bancárias
+ *     description: Retorna todas as contas bancárias cadastradas. Utiliza middleware de autenticação.
+ *     tags:
+ *       - Contas bancárias
+ *     responses:
+ *       200:
+ *         description: Lista de contas bancárias retornada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: "123e4567-e89b-12d3-a456-426614174000"
+ *                   name:
+ *                     type: string
+ *                     example: "Eletrônicos"
+ *       401:
+ *         description: Não autorizado
+ */
+bankAccountRouter.get(
+  "/",
+  authMiddleware(),
+  bankAccountController.getAllBankAccounts
+);
+
+export { bankAccountRouter };
