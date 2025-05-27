@@ -7,7 +7,7 @@ const bankAccountController = new BankAccountController();
 
 /**
  * @swagger
- * /bank-accounts/create:
+ * /bank-accounts:
  *   post:
  *     summary: Cria uma nova conta bancária
  *     description: Utiliza middleware de autenticação.
@@ -41,14 +41,14 @@ const bankAccountController = new BankAccountController();
  *         description: Dados inválidos
  */
 bankAccountRouter.post(
-  "/create",
+  "/",
   authMiddleware(),
   bankAccountController.createBankAccount
 );
 
 /**
  * @swagger
- * /bank-accounts/:
+ * /bank-accounts:
  *   get:
  *     summary: Lista todas as contas bancárias
  *     description: Retorna todas as contas bancárias cadastradas. Utiliza middleware de autenticação.

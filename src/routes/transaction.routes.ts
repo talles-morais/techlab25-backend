@@ -7,7 +7,7 @@ const transactionController = new TransactionController();
 
 /**
  * @swagger
- * /transactions/create:
+ * /transactions:
  *   post:
  *     tags:
  *       - Transações
@@ -84,9 +84,8 @@ const transactionController = new TransactionController();
  *       500:
  *         description: Erro interno do servidor.
  */
-
 transactionRouter.post(
-  "/create",
+  "/",
   authMiddleware(),
   transactionController.createTransaction
 );

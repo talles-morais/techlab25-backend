@@ -7,7 +7,7 @@ const categoryController = new CategoryController();
 
 /**
  * @swagger
- * /categories/create:
+ * /categories:
  *   post:
  *     summary: Cria uma nova categoria
  *     description: Utiliza middleware de autenticação.
@@ -32,14 +32,14 @@ const categoryController = new CategoryController();
  *         description: Dados inválidos
  */
 categoriesRouter.post(
-  "/create",
+  "/",
   authMiddleware(),
   categoryController.createCategory
 );
 
 /**
  * @swagger
- * /categories/:
+ * /categories:
  *   get:
  *     summary: Lista todas as categorias
  *     description: Retorna todas as categorias cadastradas. Utiliza middleware de autenticação.
