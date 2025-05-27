@@ -16,4 +16,21 @@ export class BankAccountRepository {
   async getAll(userId: string) {
     return await this.bankAccountRepository.findBy({ user: { id: userId } });
   }
+
+  async getById(userId: string, bankAccountId: string) {
+    return await this.bankAccountRepository.findOne({
+      where: { id: bankAccountId, user: { id: userId } },
+      relations: ["user"],
+    });
+  }
+
+  async update(userId: string, bankAccount: BankAccount) {
+    return await this.bankAccountRepository.save({
+      id: bankAccount.id,
+      name: bankAccount.name,
+      type: bankAccount.type,
+      balance: bankAccount.balance,
+      user: { id: userId },
+    });
+  }
 }
