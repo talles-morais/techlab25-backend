@@ -126,7 +126,36 @@ bankAccountRouter.get(
 bankAccountRouter.put(
   "/:id",
   authMiddleware(),
-  bankAccountController.updateBankAccounts
+  bankAccountController.updateBankAccount
+);
+
+/**
+ * @swagger
+ * /bank-accounts/{id}:
+ *   delete:
+ *     summary: Remove uma conta bancária
+ *     description: Remove uma conta bancária pelo ID. Utiliza middleware de autenticação.
+ *     tags:
+ *       - Contas bancárias
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID da conta bancária a ser removida
+ *     responses:
+ *       200:
+ *         description: Conta bancária removida com sucesso
+ *       401:
+ *         description: Não autorizado
+ *       404:
+ *         description: Conta bancária não encontrada
+ */
+bankAccountRouter.delete(
+  "/:id",
+  authMiddleware(),
+  bankAccountController.deleteBankAccount
 );
 
 export { bankAccountRouter };

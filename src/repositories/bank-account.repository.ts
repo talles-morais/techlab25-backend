@@ -33,4 +33,11 @@ export class BankAccountRepository {
       user: { id: userId },
     });
   }
+
+  async delete(userId: string, bankAccountId: string) {
+    return await this.bankAccountRepository.delete({
+      id: bankAccountId,
+      user: { id: userId },
+    });
+  }
 }

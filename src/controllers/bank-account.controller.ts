@@ -31,7 +31,7 @@ export class BankAccountController {
     res.status(200).json(bankAccounts);
   };
 
-  updateBankAccounts = async (req: Request, res: Response) => {
+  updateBankAccount = async (req: Request, res: Response) => {
     const bankAccountId = req.params.id;
     const bankAccountData = UpdateBankAccountSchema.parse(req.body);
 
@@ -42,5 +42,13 @@ export class BankAccountController {
     );
 
     res.status(200).json(bankAccount);
+  };
+
+  deleteBankAccount = async (req: Request, res: Response) => {
+    const bankAccountId = req.params.id;
+
+    await this.bankAccountService.deleteBankAccount(req.user.id, bankAccountId);
+
+    res.sendStatus(204);
   };
 }
