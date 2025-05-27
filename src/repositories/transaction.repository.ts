@@ -53,7 +53,9 @@ export class TransactionRepository {
     };
   }
 
-  async findAll(): Promise<Transaction[]> {
-    return await this.transactionRepository.find();
+  async findAll(userId: string): Promise<Transaction[]> {
+    return await this.transactionRepository.find({
+      where: { user: { id: userId } },
+    });
   }
 }

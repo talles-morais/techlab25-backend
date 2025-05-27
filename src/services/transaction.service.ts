@@ -146,4 +146,13 @@ export class TransactionService {
 
     return transactions;
   }
+
+  async getAllTransactions(userId: string) {
+    const entityManager = this.dataSource.manager;
+    const transactionRepository = new TransactionRepository(entityManager);
+
+    const transactions = await transactionRepository.findAll(userId);
+
+    return transactions;
+  }
 }

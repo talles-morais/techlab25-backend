@@ -96,7 +96,7 @@ transactionRouter.post(
  *   get:
  *     tags:
  *       - Transações
- *     summary: Listar transações
+ *     summary: Listar transações do usuário por paginação.
  *     description: Retorna uma lista paginada de transações do usuário autenticado.
  *     parameters:
  *       - in: query
@@ -126,6 +126,28 @@ transactionRouter.get(
   "/",
   authMiddleware(),
   transactionController.getTransactions
+);
+
+/**
+ * @swagger
+ * /transactions/all:
+ *   get:
+ *     tags:
+ *       - Transações
+ *     summary: Listar todas as transações do usuário
+ *     description: Retorna todas as transações do usuário autenticado, sem paginação.
+ *     responses:
+ *       200:
+ *         description: Lista completa de transações retornada com sucesso.
+ *       401:
+ *         description: Não autenticado. Verifique o cookie de sessão.
+ *       500:
+ *         description: Erro interno do servidor.
+ */
+transactionRouter.get(
+  "/all",
+  authMiddleware(),
+  transactionController.getAllTransactions
 );
 
 export { transactionRouter };

@@ -28,11 +28,17 @@ export class TransactionController {
     const page = parseInt(req.query.page as string) || DEFAULT_PAGE;
     const limit = parseInt(req.query.limit as string) || DEFAULT_LIMIT;
 
-    const result = await this.transactionService.getTransactions(req.user.id, {
+    const transactions = await this.transactionService.getTransactions(req.user.id, {
       page,
       limit,
     });
 
-    res.status(200).json(result);
+    res.status(200).json(transactions);
   };
+
+  getAllTransactions = async (req: Request, res: Response) => {
+    const transactions = await this.transactionService.getAllTransactions(req.user.id)
+
+    res.status(200).json(transactions)
+  }
 }
