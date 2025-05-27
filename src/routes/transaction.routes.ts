@@ -91,4 +91,42 @@ transactionRouter.post(
   transactionController.createTransaction
 );
 
+/**
+ * @swagger
+ * /transactions:
+ *   get:
+ *     tags:
+ *       - Transações
+ *     summary: Listar transações
+ *     description: Retorna uma lista paginada de transações do usuário autenticado.
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Número da página para paginação.
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: Quantidade de itens por página.
+ *     responses:
+ *       200:
+ *         description: Lista de transações retornada com sucesso.
+ *       401:
+ *         description: Não autenticado. Verifique o cookie de sessão.
+ *       500:
+ *         description: Erro interno do servidor.
+ */
+transactionRouter.get(
+  "/",
+  authMiddleware(),
+  transactionController.getTransactions
+);
+
 export { transactionRouter };

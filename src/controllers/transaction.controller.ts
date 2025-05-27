@@ -20,4 +20,19 @@ export class TransactionController {
 
     res.status(201).json(transaction);
   };
+
+  getTransactions = async (req: Request, res: Response) => {
+    const DEFAULT_PAGE = 1;
+    const DEFAULT_LIMIT = 10;
+
+    const page = parseInt(req.query.page as string) || DEFAULT_PAGE;
+    const limit = parseInt(req.query.limit as string) || DEFAULT_LIMIT;
+
+    const result = await this.transactionService.getTransactions(req.user.id, {
+      page,
+      limit,
+    });
+
+    res.status(200).json(result);
+  };
 }

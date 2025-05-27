@@ -5,9 +5,18 @@ import { Transaction } from "../entities/Transaction";
 import { User } from "../entities/User";
 import { BankAccountRepository } from "../repositories/bank-account.repository";
 import { CategoryRepository } from "../repositories/category.repository";
-import { TransactionRepository } from "../repositories/transaction.repository";
+import {
+  PaginatedResult,
+  PaginationOptions,
+  TransactionRepository,
+} from "../repositories/transaction.repository";
 import { HttpError } from "../utils/http-error";
 import { TransactionType } from "../enums/TransactionType.enum";
+
+export interface GetTransactionsQuery {
+  page?: number;
+  limit?: number;
+}
 
 export class TransactionService {
   constructor(private dataSource: DataSource) {}
@@ -109,5 +118,32 @@ export class TransactionService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  async getTransactions(
+    userId: string,
+    query: GetTransactionsQuery = {}
+  ): Promise<PaginatedResult<Transaction>> {
+    const MAX_LIMIT = 40;
+    const { page = 1, limit = 10 } = query;
+
+    if (page < 1) {
+      throw new HttpError(400, "O número da página deve ser maior que 0.");
+    }
+    if (limit < 1 || limit > MAX_LIMIT) {
+      throw new HttpError(400, `O limite deve estar entre 1 e ${MAX_LIMIT}`);
+    }
+
+    const entityManager = this.dataSource.manager;
+    const transactionRepository = new TransactionRepository(entityManager);
+
+    const paginationOptions: PaginationOptions = { page, limit };
+
+    const transactions = await transactionRepository.findWithPagination(
+      userId,
+      paginationOptions
+    );
+
+    return transactions;
   }
 }
