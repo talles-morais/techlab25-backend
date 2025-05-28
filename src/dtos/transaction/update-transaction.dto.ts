@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { TransactionTypeValues } from "../../enums/TransactionType.enum";
 
-export const CreateTransactionSchema = z.object({
+export const UpdateTransactionSchema = z.object({
   fromAccountId: z
     .string()
     .uuid({ message: "Conta de origem inválida" })
@@ -40,4 +40,4 @@ export const CreateTransactionSchema = z.object({
   type: z.enum(TransactionTypeValues),
 });
 
-export type CreateTransactionDTO = z.infer<typeof CreateTransactionSchema>;
+export type UpdateTransactionDTO = z.infer<typeof UpdateTransactionSchema>;

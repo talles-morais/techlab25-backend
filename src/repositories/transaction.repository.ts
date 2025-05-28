@@ -58,4 +58,21 @@ export class TransactionRepository {
       where: { user: { id: userId } },
     });
   }
+
+  async findById(userId: string, transactionId: string) {
+    return await this.transactionRepository.findOne({
+      where: {
+        id: transactionId,
+        user: { id: userId },
+      },
+      relations: ["fromAccount", "toAccount", "category", "user"],
+    });
+  }
+
+  async update(userId: string, transactionData: Partial<Transaction>) {
+    return await this.transactionRepository.save({
+      ...transactionData,
+      user: { id: userId },
+    });
+  }
 }

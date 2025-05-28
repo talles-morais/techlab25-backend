@@ -12,6 +12,7 @@ import {
 } from "../repositories/transaction.repository";
 import { HttpError } from "../utils/http-error";
 import { TransactionType } from "../enums/TransactionType.enum";
+import { UpdateTransactionDTO } from "../dtos/transaction/update-transaction.dto";
 
 export interface GetTransactionsQuery {
   page?: number;
@@ -154,5 +155,155 @@ export class TransactionService {
     const transactions = await transactionRepository.findAll(userId);
 
     return transactions;
+  }
+
+  async updateTransaction(
+    userId: string,
+    transactionId: string,
+    transactionData: UpdateTransactionDTO
+  ) {
+    const { fromAccountId, toAccountId, amount } = transactionData;
+
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const transactionRepository = new TransactionRepository(
+        queryRunner.manager
+      );
+      const bankAccountRepository = new BankAccountRepository(
+        queryRunner.manager
+      );
+      const categoryRepository = new CategoryRepository(queryRunner.manager);
+
+      const transactionExists = await transactionRepository.findById(
+        userId,
+        transactionId
+      );
+
+      if (!transactionExists) {
+        throw new HttpError(404, "Transação não encontrada.");
+      }
+
+      if (fromAccountId === toAccountId) {
+        throw new HttpError(
+          400,
+          "Não é permitido transferir valores para a mesma conta."
+        );
+      }
+
+      const user = new User();
+      user.id = userId;
+
+      let fromAccount = transactionExists.fromAccount;
+      let toAccount = transactionExists.toAccount;
+
+      let updatedFromAccount = fromAccount;
+      if (fromAccountId) {
+        const newFromAccount = await bankAccountRepository.getById(
+          userId,
+          fromAccountId
+        );
+
+        if (!newFromAccount) {
+          throw new HttpError(404, "Conta de origem não encontrada.");
+        }
+
+        // se for a mesma conta de origem
+        if (fromAccount.id === newFromAccount.id) {
+          fromAccount.balance += transactionExists.amount;
+          newFromAccount.balance = fromAccount.balance - amount;
+
+          if (newFromAccount.balance < 0) {
+            throw new HttpError(422, "Saldo insuficiente na conta de origem.");
+          }
+        }
+        // se for outra conta
+        else {
+          fromAccount.balance += transactionExists.amount;
+
+          if (newFromAccount.balance < amount) {
+            throw new HttpError(
+              422,
+              "Saldo insuficiente na nova conta de origem."
+            );
+          }
+
+          newFromAccount.balance -= amount;
+        }
+
+        await bankAccountRepository.update(userId, fromAccount);
+        await bankAccountRepository.update(userId, newFromAccount);
+        updatedFromAccount = newFromAccount;
+      }
+
+      let updatedToAccount = toAccount;
+      if (toAccountId) {
+        const newToAccount = await bankAccountRepository.getById(
+          userId,
+          toAccountId
+        );
+
+        if (!newToAccount) {
+          throw new HttpError(404, "Conta de destino não encontrada.");
+        }
+
+        // se for o mesmo destino, substitui
+        if (toAccount.id === newToAccount.id) {
+          toAccount.balance -= transactionExists.amount;
+          newToAccount.balance = toAccount.balance + amount;
+        }
+        // se for outra conta, decrementa a antiga e incrementa a nova
+        else {
+          toAccount.balance -= transactionExists.amount;
+          newToAccount.balance += amount;
+        }
+
+        await bankAccountRepository.update(userId, toAccount);
+        await bankAccountRepository.update(userId, newToAccount);
+        updatedToAccount = newToAccount;
+      }
+
+      if (transactionExists.category.id !== transactionData.categoryId) {
+        const newCategory = await categoryRepository.getById(
+          userId,
+          transactionData.categoryId
+        );
+        if (!newCategory) {
+          throw new HttpError(404, "Categoria não encontrada.");
+        }
+        transactionExists.category = newCategory;
+      }
+
+      const transaction = new Transaction();
+      transaction.id = transactionId;
+      transaction.user = user;
+      transaction.fromAccount = updatedFromAccount;
+      transaction.toAccount = updatedToAccount;
+      transaction.amount = amount;
+      transaction.description = transactionData.description;
+      transaction.date = transactionData.date;
+      transaction.type = TransactionType[transactionData.type];
+      transaction.category = transactionExists.category;
+
+      const createdTransaction = await transactionRepository.update(
+        userId,
+        transaction
+      );
+
+      await queryRunner.commitTransaction();
+
+      return createdTransaction;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new HttpError(
+        error.statusCode || 500,
+        error.message || "Erro interno no servidor"
+      );
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

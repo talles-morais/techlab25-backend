@@ -25,7 +25,12 @@ export class CreditInvoice {
   @Column()
   endDate: Date;
 
-  @Column("decimal")
+  @Column("decimal", {
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   totalAmount: number;
 
   @Column({ type: "enum", enum: CreditInvoiceStatus })

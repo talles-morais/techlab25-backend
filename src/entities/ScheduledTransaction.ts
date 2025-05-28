@@ -25,7 +25,12 @@ export class ScheduledTransaction {
   @Column()
   description: string;
 
-  @Column("decimal")
+  @Column("decimal", {
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   amount: number;
 
   @Column({ type: "enum", enum: Recurrence })

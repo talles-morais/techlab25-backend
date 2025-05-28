@@ -41,7 +41,12 @@ export class Transaction {
   })
   invoice?: CreditInvoice;
 
-  @Column("decimal")
+  @Column("decimal", {
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   amount: number;
 
   @Column()

@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { TransactionService } from "../services/transaction.service";
 import { CreateTransactionSchema } from "../dtos/transaction/create-transaction.dto";
+import { UpdateCategorySchema } from "../dtos/category/update-category.dto";
+import { UpdateTransactionSchema } from "../dtos/transaction/update-transaction.dto";
 
 export class TransactionController {
   private transactionService: TransactionService;
@@ -28,17 +30,35 @@ export class TransactionController {
     const page = parseInt(req.query.page as string) || DEFAULT_PAGE;
     const limit = parseInt(req.query.limit as string) || DEFAULT_LIMIT;
 
-    const transactions = await this.transactionService.getTransactions(req.user.id, {
-      page,
-      limit,
-    });
+    const transactions = await this.transactionService.getTransactions(
+      req.user.id,
+      {
+        page,
+        limit,
+      }
+    );
 
     res.status(200).json(transactions);
   };
 
   getAllTransactions = async (req: Request, res: Response) => {
-    const transactions = await this.transactionService.getAllTransactions(req.user.id)
+    const transactions = await this.transactionService.getAllTransactions(
+      req.user.id
+    );
 
-    res.status(200).json(transactions)
-  }
+    res.status(200).json(transactions);
+  };
+
+  updateTransaction = async (req: Request, res: Response) => {
+    const transactionId = req.params.id;
+    const transactionData = UpdateTransactionSchema.parse(req.body);
+
+    const transaction = await this.transactionService.updateTransaction(
+      req.user.id,
+      transactionId,
+      transactionData
+    );
+
+    res.status(200).json(transaction);
+  };
 }
