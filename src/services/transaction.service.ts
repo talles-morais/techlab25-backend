@@ -306,4 +306,64 @@ export class TransactionService {
       await queryRunner.release();
     }
   }
+
+  async deleteTransaction(userId: string, transactionId: string) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const transactionRepository = new TransactionRepository(
+        queryRunner.manager
+      );
+      const bankAccountRepository = new BankAccountRepository(
+        queryRunner.manager
+      );
+
+      const transactionExists = await transactionRepository.findById(
+        userId,
+        transactionId
+      );
+
+      if (!transactionExists) {
+        throw new HttpError(404, "Transação não encontrada.");
+      }
+
+      const user = new User();
+      user.id = userId;
+
+      if (transactionExists.fromAccount) {
+        const fromAccountId = transactionExists.fromAccount.id;
+        const fromAccount = await bankAccountRepository.getById(
+          userId,
+          fromAccountId
+        );
+        fromAccount.balance += transactionExists.amount;
+        await bankAccountRepository.update(userId, fromAccount);
+      }
+
+      if (transactionExists.toAccount) {
+        const toAccountId = transactionExists.toAccount.id;
+        const toAccount = await bankAccountRepository.getById(
+          userId,
+          toAccountId
+        );
+        toAccount.balance -= transactionExists.amount;
+        await bankAccountRepository.update(userId, toAccount);
+      }
+
+      await transactionRepository.delete(userId, transactionId);
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new HttpError(
+        error.statusCode || 500,
+        error.message || "Erro interno no servidor"
+      );
+    } finally {
+      await queryRunner.release();
+    }
+  }
 }

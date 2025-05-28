@@ -75,4 +75,11 @@ export class TransactionRepository {
       user: { id: userId },
     });
   }
+
+  async delete(userId: string, transactionId: string) {
+    return await this.transactionRepository.delete({
+      id: transactionId,
+      user: { id: userId },
+    });
+  }
 }

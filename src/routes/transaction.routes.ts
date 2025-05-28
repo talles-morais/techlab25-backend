@@ -243,5 +243,36 @@ transactionRouter.put(
   transactionController.updateTransaction
 );
 
+/**
+ * @swagger
+ * /transactions/{id}:
+ *   delete:
+ *     tags:
+ *       - Transações
+ *     summary: Excluir uma transação
+ *     description: Remove uma transação existente do usuário autenticado.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID da transação a ser excluída.
+ *     responses:
+ *       200:
+ *         description: Transação excluída com sucesso.
+ *       401:
+ *         description: Não autenticado. Verifique o cookie de sessão.
+ *       404:
+ *         description: Transação não encontrada.
+ *       500:
+ *         description: Erro interno do servidor.
+ */
+transactionRouter.delete(
+  "/:id",
+  authMiddleware(),
+  transactionController.deleteTransaction
+);
 
 export { transactionRouter };

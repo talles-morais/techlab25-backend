@@ -61,4 +61,12 @@ export class TransactionController {
 
     res.status(200).json(transaction);
   };
+
+  deleteTransaction = async (req: Request, res: Response) => {
+    const transactionId = req.params.id;
+
+    await this.transactionService.deleteTransaction(req.user.id, transactionId);
+
+    res.sendStatus(204);
+  };
 }
