@@ -3,8 +3,8 @@ import { ZodError } from "zod";
 import { CreateUserResponseDTO } from "../../src/dtos/user/create-user-response.dto";
 import { HttpError } from "../../src/utils/http-error";
 
-import { mockRequest, mockResponse } from "../helpers/mockUtils";
-import { makeSutForUserController } from "../helpers/makeSutForUserController";
+import { mockRequest, mockResponse } from "../controllers/helpers/mockUtils";
+import { makeSutForUserController } from "../controllers/helpers/makeSutForUserController";
 
 jest.mock("../../src/services/user.service");
 
