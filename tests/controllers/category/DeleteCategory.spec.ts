@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { makeSutForCategoryController } from "../helpers/makeSutForCategoryController";
 import { mockRequest, mockResponse } from "../helpers/mockUtils";
-import { HttpError } from "../../src/utils/http-error";
+import { HttpError } from "../../../src/utils/http-error";
 
-jest.mock("../../src/services/category.service");
+jest.mock("../../../src/services/category.service");
 
 describe("Category controller - delete category", () => {
   const { categoryController, categoryServiceMock } = makeSutForCategoryController();

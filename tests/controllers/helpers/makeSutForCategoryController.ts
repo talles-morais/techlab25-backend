@@ -1,5 +1,4 @@
 import { CategoryController } from "../../../src/controllers/category.controller";
-import { CategoryService } from "../../../src/services/category.service";
 
 export function makeSutForCategoryController() {
   const categoryServiceMock = {

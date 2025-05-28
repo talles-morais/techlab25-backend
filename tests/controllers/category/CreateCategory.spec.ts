@@ -2,16 +2,16 @@ import { Request, Response } from "express";
 
 import { makeSutForCategoryController } from "../helpers/makeSutForCategoryController";
 import { mockRequest, mockResponse } from "../helpers/mockUtils";
-import { CreateCategorySchema } from "../../src/dtos/category/create-category.dto";
+import { CreateCategorySchema } from "../../../src/dtos/category/create-category.dto";
 import { ZodError } from "zod";
 
-jest.mock("../../src/dtos/category/create-category.dto", () => ({
+jest.mock("../../../src/dtos/category/create-category.dto", () => ({
   CreateCategorySchema: {
     parse: jest.fn(),
   },
 }));
 
-jest.mock("../../src/services/category.service");
+jest.mock("../../../src/services/category.service");
 
 describe("Category controller - create category", () => {
   const { categoryController, categoryServiceMock } =

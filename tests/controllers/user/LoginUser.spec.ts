@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { ZodError } from "zod";
-import { HttpError } from "../../src/utils/http-error";
+import { HttpError } from "../../../src/utils/http-error";
 
-import { mockRequest, mockResponse } from "../controllers/helpers/mockUtils";
-import { makeSutForUserController } from "../controllers/helpers/makeSutForUserController";
+import { mockRequest, mockResponse } from "../../controllers/helpers/mockUtils";
+import { makeSutForUserController } from "../../controllers/helpers/makeSutForUserController";
 
-jest.mock("../../src/services/user.service");
+jest.mock("../../../src/services/user.service");
 
 describe("User controller - login (unit)", () => {
   const { userController, userServiceMock } = makeSutForUserController();
