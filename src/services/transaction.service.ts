@@ -197,32 +197,60 @@ export class TransactionService {
       const user = new User();
       user.id = userId;
 
-      let fromAccount = transactionExists.fromAccount;
-      let toAccount = transactionExists.toAccount;
+      let updatedFromAccount = transactionExists.fromAccount;
 
-      let updatedFromAccount = fromAccount;
+      // Processa a conta de origem
       if (fromAccountId) {
-        const newFromAccount = await bankAccountRepository.getById(
-          userId,
-          fromAccountId
-        );
+        if (
+          transactionExists.fromAccount &&
+          transactionExists.fromAccount.id === fromAccountId
+        ) {
+          // Mesma conta de origem - apenas ajusta para o novo valor
+          const currentFromAccount = await bankAccountRepository.getById(
+            userId,
+            fromAccountId
+          );
 
-        if (!newFromAccount) {
-          throw new HttpError(404, "Conta de origem não encontrada.");
-        }
+          if (!currentFromAccount) {
+            throw new HttpError(404, "Conta de origem não encontrada.");
+          }
 
-        // se for a mesma conta de origem
-        if (fromAccount.id === newFromAccount.id) {
-          fromAccount.balance += transactionExists.amount;
-          newFromAccount.balance = fromAccount.balance - amount;
+          // Restaura o saldo e aplica o novo valor
+          const restoredBalance =
+            currentFromAccount.balance + transactionExists.amount;
 
-          if (newFromAccount.balance < 0) {
+          if (restoredBalance < amount) {
             throw new HttpError(422, "Saldo insuficiente na conta de origem.");
           }
-        }
-        // se for outra conta
-        else {
-          fromAccount.balance += transactionExists.amount;
+
+          currentFromAccount.balance = restoredBalance - amount;
+          await bankAccountRepository.update(userId, currentFromAccount);
+          updatedFromAccount = currentFromAccount;
+        } else {
+          // Conta de origem diferente - restaura a antiga e debita da nova
+
+          // Restaura a conta de origem original
+          if (transactionExists.fromAccount) {
+            const oldFromAccount = await bankAccountRepository.getById(
+              userId,
+              transactionExists.fromAccount.id
+            );
+
+            if (oldFromAccount) {
+              oldFromAccount.balance += transactionExists.amount;
+              await bankAccountRepository.update(userId, oldFromAccount);
+            }
+          }
+
+          // Debita da nova conta de origem
+          const newFromAccount = await bankAccountRepository.getById(
+            userId,
+            fromAccountId
+          );
+
+          if (!newFromAccount) {
+            throw new HttpError(404, "Conta de origem não encontrada.");
+          }
 
           if (newFromAccount.balance < amount) {
             throw new HttpError(
@@ -232,40 +260,67 @@ export class TransactionService {
           }
 
           newFromAccount.balance -= amount;
+          await bankAccountRepository.update(userId, newFromAccount);
+          updatedFromAccount = newFromAccount;
         }
-
-        await bankAccountRepository.update(userId, fromAccount);
-        await bankAccountRepository.update(userId, newFromAccount);
-        updatedFromAccount = newFromAccount;
       }
 
-      let updatedToAccount = toAccount;
+      let updatedToAccount = transactionExists.toAccount;
+
+      // Processa a conta de destino
       if (toAccountId) {
-        const newToAccount = await bankAccountRepository.getById(
-          userId,
-          toAccountId
-        );
+        if (
+          transactionExists.toAccount &&
+          transactionExists.toAccount.id === toAccountId
+        ) {
+          // Mesma conta de destino - ajusta para o novo valor
+          const currentToAccount = await bankAccountRepository.getById(
+            userId,
+            toAccountId
+          );
 
-        if (!newToAccount) {
-          throw new HttpError(404, "Conta de destino não encontrada.");
-        }
+          if (!currentToAccount) {
+            throw new HttpError(404, "Conta de destino não encontrada.");
+          }
 
-        // se for o mesmo destino, substitui
-        if (toAccount.id === newToAccount.id) {
-          toAccount.balance -= transactionExists.amount;
-          newToAccount.balance = toAccount.balance + amount;
-        }
-        // se for outra conta, decrementa a antiga e incrementa a nova
-        else {
-          toAccount.balance -= transactionExists.amount;
+          // Remove o valor antigo e adiciona o novo valor
+          currentToAccount.balance =
+            currentToAccount.balance - transactionExists.amount + amount;
+          await bankAccountRepository.update(userId, currentToAccount);
+          updatedToAccount = currentToAccount;
+        } else {
+          // Conta de destino diferente - remove da antiga e adiciona na nova
+
+          // Remove da conta de destino original
+          if (transactionExists.toAccount) {
+            const oldToAccount = await bankAccountRepository.getById(
+              userId,
+              transactionExists.toAccount.id
+            );
+
+            if (oldToAccount) {
+              oldToAccount.balance -= transactionExists.amount;
+              await bankAccountRepository.update(userId, oldToAccount);
+            }
+          }
+
+          // Adiciona na nova conta de destino
+          const newToAccount = await bankAccountRepository.getById(
+            userId,
+            toAccountId
+          );
+
+          if (!newToAccount) {
+            throw new HttpError(404, "Conta de destino não encontrada.");
+          }
+
           newToAccount.balance += amount;
+          await bankAccountRepository.update(userId, newToAccount);
+          updatedToAccount = newToAccount;
         }
-
-        await bankAccountRepository.update(userId, toAccount);
-        await bankAccountRepository.update(userId, newToAccount);
-        updatedToAccount = newToAccount;
       }
 
+      // Atualiza a categoria se necessário
       if (transactionExists.category.id !== transactionData.categoryId) {
         const newCategory = await categoryRepository.getById(
           userId,

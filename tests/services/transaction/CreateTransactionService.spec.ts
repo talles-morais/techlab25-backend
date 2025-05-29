@@ -3,6 +3,7 @@ import {
   TransactionType,
   TransactionTypeValues,
 } from "../../../src/enums/TransactionType.enum";
+import { TransactionService } from "../../../src/services/transaction.service";
 import { HttpError } from "../../../src/utils/http-error";
 import {
   clearAllMocks,
