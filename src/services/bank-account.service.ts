@@ -18,7 +18,7 @@ export class BankAccountService {
 
     const bankAccount = new BankAccount();
     bankAccount.name = bankAccountData.name;
-    bankAccount.type = BankAccountType[bankAccountData.type];
+    bankAccount.type = bankAccountData.type;
     bankAccount.balance = bankAccountData.balance;
     bankAccount.user = user;
 
@@ -57,7 +57,7 @@ export class BankAccountService {
     }
 
     bankAccountExists.name = bankAccountData.name;
-    bankAccountExists.type = BankAccountType[bankAccountData.type];
+    bankAccountExists.type = bankAccountData.type;
     bankAccountExists.balance = bankAccountData.balance;
 
     const updatedBankAccount = await this.bankAccountRepository.update(
