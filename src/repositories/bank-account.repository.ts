@@ -29,7 +29,6 @@ export class BankAccountRepository {
       id: bankAccount.id,
       name: bankAccount.name,
       type: bankAccount.type,
-      balance: bankAccount.balance,
       user: { id: userId },
     });
   }

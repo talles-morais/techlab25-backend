@@ -111,8 +111,6 @@ bankAccountRouter.get(
  *                   - INVESTMENT
  *                   - OTHER
  *                 description: "Tipo da conta. Opções: CHECKING, SAVINGS, INVESTMENT, OTHER."
- *               balance:
- *                 type: number
  *     responses:
  *       200:
  *         description: Conta bancária atualizada com sucesso

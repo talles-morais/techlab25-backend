@@ -38,6 +38,7 @@ export class TransactionRepository {
       where: { user: { id: userId } },
       skip,
       take: limit,
+      relations: ["fromAccount", "toAccount", "category"],
     });
 
     const totalPages = Math.ceil(total / limit);
