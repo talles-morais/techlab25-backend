@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { TransactionService } from "../services/transaction.service";
 import { CreateTransactionSchema } from "../dtos/transaction/create-transaction.dto";
-import { UpdateCategorySchema } from "../dtos/category/update-category.dto";
 import { UpdateTransactionSchema } from "../dtos/transaction/update-transaction.dto";
 
 export class TransactionController {

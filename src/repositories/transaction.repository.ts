@@ -57,6 +57,7 @@ export class TransactionRepository {
   async findAll(userId: string): Promise<Transaction[]> {
     return await this.transactionRepository.find({
       where: { user: { id: userId } },
+      relations: ["fromAccount", "toAccount", "category"],
     });
   }
 
