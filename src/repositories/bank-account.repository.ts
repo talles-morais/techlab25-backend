@@ -40,4 +40,14 @@ export class BankAccountRepository {
       user: { id: userId },
     });
   }
+
+  async getTotalBalance(userId: string): Promise<number> {
+    const result = await this.bankAccountRepository
+      .createQueryBuilder("bankAccount")
+      .select("SUM(bankAccount.balance)", "total")
+      .where("bankAccount.userId = :userId", { userId })
+      .getRawOne();
+
+    return Number(result.total) || 0;
+  }
 }

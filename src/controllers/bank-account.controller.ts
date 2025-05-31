@@ -33,6 +33,12 @@ export class BankAccountController {
     res.status(200).json(bankAccounts);
   };
 
+  getTotalBalance = async (req: Request, res: Response) => {
+    const balance = await this.bankAccountService.getTotalBalance(req.user.id);
+
+    res.status(200).json(balance);
+  };
+
   updateBankAccount = async (req: Request, res: Response) => {
     const bankAccountId = req.params.id;
     const bankAccountData = UpdateBankAccountSchema.parse(req.body);

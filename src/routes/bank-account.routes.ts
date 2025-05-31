@@ -81,6 +81,34 @@ bankAccountRouter.get(
 
 /**
  * @swagger
+ * /bank-accounts/balance:
+ *   get:
+ *     summary: Obtém o saldo total das contas bancárias
+ *     description: Retorna o saldo total de todas as contas bancárias do usuário autenticado.
+ *     tags:
+ *       - Contas bancárias
+ *     responses:
+ *       200:
+ *         description: Saldo total retornado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalBalance:
+ *                   type: number
+ *                   example: 1500.50
+ *       401:
+ *         description: Não autorizado
+ */
+bankAccountRouter.get(
+  "/balance",
+  authMiddleware(),
+  bankAccountController.getTotalBalance
+);
+
+/**
+ * @swagger
  * /bank-accounts/{id}:
  *   put:
  *     summary: Atualiza uma conta bancária existente

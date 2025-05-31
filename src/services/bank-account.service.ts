@@ -86,4 +86,10 @@ export class BankAccountService {
 
     await this.bankAccountRepository.delete(userId, bankAccountExists.id);
   }
+
+  async getTotalBalance(userId: string) {
+    const result = await this.bankAccountRepository.getTotalBalance(userId);
+
+    return result;
+  }
 }
