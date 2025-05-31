@@ -48,6 +48,17 @@ export class TransactionController {
     res.status(200).json(transactions);
   };
 
+  getTransactionById = async (req: Request, res: Response) => {
+    const transactionId = req.params.id;
+
+    const transaction = await this.transactionService.getTransactionById(
+      req.user.id,
+      transactionId
+    );
+
+    res.status(200).json(transaction);
+  };
+
   updateTransaction = async (req: Request, res: Response) => {
     const transactionId = req.params.id;
     const transactionData = UpdateTransactionSchema.parse(req.body);

@@ -157,6 +157,18 @@ export class TransactionService {
     return transactions;
   }
 
+  async getTransactionById(userId: string, transactionId: string) {
+    const entityManager = this.dataSource.manager;
+    const transactionRepository = new TransactionRepository(entityManager);
+
+    const transaction = await transactionRepository.findById(
+      userId,
+      transactionId
+    );
+
+    return transaction;
+  }
+
   async updateTransaction(
     userId: string,
     transactionId: string,

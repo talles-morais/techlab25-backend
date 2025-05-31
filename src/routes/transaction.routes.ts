@@ -153,6 +153,38 @@ transactionRouter.get(
 /**
  * @swagger
  * /transactions/{id}:
+ *   get:
+ *     tags:
+ *       - Transações
+ *     summary: Buscar uma transação por ID
+ *     description: Retorna os detalhes de uma transação específica do usuário autenticado.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID da transação a ser buscada.
+ *     responses:
+ *       200:
+ *         description: Detalhes da transação retornados com sucesso.
+ *       401:
+ *         description: Não autenticado. Verifique o cookie de sessão.
+ *       404:
+ *         description: Transação não encontrada.
+ *       500:
+ *         description: Erro interno do servidor.
+ */
+transactionRouter.get(
+  "/:id",
+  authMiddleware(),
+  transactionController.getTransactionById
+);
+
+/**
+ * @swagger
+ * /transactions/{id}:
  *   put:
  *     tags:
  *       - Transações
