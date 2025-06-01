@@ -1,13 +1,14 @@
 import { z } from "zod";
-import { BankAccountTypeValues } from "../../enums/BankAccountType.enum";
+import { BankAccountType } from "../../enums/BankAccountType.enum";
 
 export const UpdateBankAccountSchema = z.object({
-  name: z.string().trim().min(1, "Nome é obrigatório"),
-  type: z.enum(BankAccountTypeValues),
+  name: z.string().trim().min(1, "Nome é obrigatório").optional(),
+  type: z.nativeEnum(BankAccountType).optional(),
   balance: z
-    .number()
-    .finite("Saldo deve ser um número válido")
-    .nonnegative("Saldo não pode ser negativo"),
+    .number({ invalid_type_error: "Valor deve ser um número" })
+    .finite("Valor deve ser um número válido")
+    .nonnegative("Valor do saldo não pode ser negativo")
+    .optional(),
 });
 
 export type UpdateBankAccountDTO = z.infer<typeof UpdateBankAccountSchema>;

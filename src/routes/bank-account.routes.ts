@@ -7,7 +7,7 @@ const bankAccountController = new BankAccountController();
 
 /**
  * @swagger
- * /bank-accounts/create:
+ * /bank-accounts:
  *   post:
  *     summary: Cria uma nova conta bancária
  *     description: Utiliza middleware de autenticação.
@@ -41,14 +41,14 @@ const bankAccountController = new BankAccountController();
  *         description: Dados inválidos
  */
 bankAccountRouter.post(
-  "/create",
+  "/",
   authMiddleware(),
   bankAccountController.createBankAccount
 );
 
 /**
  * @swagger
- * /bank-accounts/:
+ * /bank-accounts:
  *   get:
  *     summary: Lista todas as contas bancárias
  *     description: Retorna todas as contas bancárias cadastradas. Utiliza middleware de autenticação.
@@ -77,6 +77,34 @@ bankAccountRouter.get(
   "/",
   authMiddleware(),
   bankAccountController.getAllBankAccounts
+);
+
+/**
+ * @swagger
+ * /bank-accounts/balance:
+ *   get:
+ *     summary: Obtém o saldo total das contas bancárias
+ *     description: Retorna o saldo total de todas as contas bancárias do usuário autenticado.
+ *     tags:
+ *       - Contas bancárias
+ *     responses:
+ *       200:
+ *         description: Saldo total retornado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalBalance:
+ *                   type: number
+ *                   example: 1500.50
+ *       401:
+ *         description: Não autorizado
+ */
+bankAccountRouter.get(
+  "/balance",
+  authMiddleware(),
+  bankAccountController.getTotalBalance
 );
 
 /**
@@ -111,8 +139,6 @@ bankAccountRouter.get(
  *                   - INVESTMENT
  *                   - OTHER
  *                 description: "Tipo da conta. Opções: CHECKING, SAVINGS, INVESTMENT, OTHER."
- *               balance:
- *                 type: number
  *     responses:
  *       200:
  *         description: Conta bancária atualizada com sucesso

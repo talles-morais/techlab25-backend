@@ -26,7 +26,12 @@ export class BankAccount {
   @Column({ type: "enum", enum: BankAccountType })
   type: BankAccountType;
 
-  @Column("decimal")
+  @Column("decimal", {
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   balance: number;
 
   @OneToMany(() => Transaction, (transaction) => transaction.fromAccount, {

@@ -1,12 +1,12 @@
-import { Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { BankAccount } from "../entities/BankAccount";
 import { AppDataSource } from "../data-source";
 
 export class BankAccountRepository {
   private bankAccountRepository: Repository<BankAccount>;
 
-  constructor() {
-    this.bankAccountRepository = AppDataSource.getRepository(BankAccount);
+  constructor(entityManager: EntityManager) {
+    this.bankAccountRepository = entityManager.getRepository(BankAccount);
   }
 
   async create(bankAccount: BankAccount) {
@@ -39,5 +39,15 @@ export class BankAccountRepository {
       id: bankAccountId,
       user: { id: userId },
     });
+  }
+
+  async getTotalBalance(userId: string): Promise<number> {
+    const result = await this.bankAccountRepository
+      .createQueryBuilder("bankAccount")
+      .select("SUM(bankAccount.balance)", "total")
+      .where("bankAccount.userId = :userId", { userId })
+      .getRawOne();
+
+    return Number(result.total) || 0;
   }
 }

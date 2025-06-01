@@ -36,7 +36,7 @@ const config: Config = {
     "/src/dtos/",
     "/src/utils/hash.ts",
     "/src/utils/http-error.ts",
-    "/tests/helpers",
+    "/tests/",
     "/src/data.source.ts"
   ],
 

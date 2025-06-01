@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import { makeSutForCategoryController } from "../helpers/makeSutForCategoryController";
 import { mockRequest, mockResponse } from "../helpers/mockUtils";;
 
-jest.mock("../../src/dtos/category/update-category.dto", () => ({
+jest.mock("../../../src/dtos/category/update-category.dto", () => ({
   UpdateCategorySchema: {
     parse: jest.fn(),
   },
 }));
 
-jest.mock("../../src/services/category.service");
+jest.mock("../../../src/services/category.service");
 
 describe("Category controller - get all categories", () => {
   const { categoryController, categoryServiceMock } =

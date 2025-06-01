@@ -3,12 +3,14 @@ import { BankAccountService } from "../services/bank-account.service";
 import { CreateBankAccountSchema } from "../dtos/bank-account/create-bank-account.dto";
 import { BankAccountRepository } from "../repositories/bank-account.repository";
 import { UpdateBankAccountSchema } from "../dtos/bank-account/update-bank-account.dto";
+import { AppDataSource } from "../data-source";
 
 export class BankAccountController {
   private bankAccountService: BankAccountService;
 
   constructor() {
-    const bankAccountRepository = new BankAccountRepository();
+    const entityManager = AppDataSource.manager;
+    const bankAccountRepository = new BankAccountRepository(entityManager);
     this.bankAccountService = new BankAccountService(bankAccountRepository);
   }
 
@@ -29,6 +31,12 @@ export class BankAccountController {
     );
 
     res.status(200).json(bankAccounts);
+  };
+
+  getTotalBalance = async (req: Request, res: Response) => {
+    const balance = await this.bankAccountService.getTotalBalance(req.user.id);
+
+    res.status(200).json(balance);
   };
 
   updateBankAccount = async (req: Request, res: Response) => {

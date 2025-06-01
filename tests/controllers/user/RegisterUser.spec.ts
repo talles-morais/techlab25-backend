@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { ZodError } from "zod";
-import { CreateUserResponseDTO } from "../../src/dtos/user/create-user-response.dto";
-import { HttpError } from "../../src/utils/http-error";
+import { CreateUserResponseDTO } from "../../../src/dtos/user/create-user-response.dto";
+import { HttpError } from "../../../src/utils/http-error";
 
-import { mockRequest, mockResponse } from "../helpers/mockUtils";
-import { makeSutForUserController } from "../helpers/makeSutForUserController";
+import { mockRequest, mockResponse } from "../../controllers/helpers/mockUtils";
+import { makeSutForUserController } from "../../controllers/helpers/makeSutForUserController";
 
-jest.mock("../../src/services/user.service");
+jest.mock("../../../src/services/user.service");
 
 describe("User controller - create user", () => {
   const { userController, userServiceMock } = makeSutForUserController()

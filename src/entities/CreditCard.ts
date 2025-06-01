@@ -22,7 +22,12 @@ export class CreditCard {
   @Column()
   name: string;
 
-  @Column("decimal")
+  @Column("decimal", {
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   limit: number;
 
   @Column("int")
